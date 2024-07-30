@@ -19,21 +19,22 @@ if uploaded_image is not None:
     image_name = uploaded_image.name
     name, extension = os.path.splitext(image_name)
 
-    #Remove the background
-    nobg_image = remove(image)
+    with st.spinner("Removing background... "):
+        #Remove the background
+        nobg_image = remove(image)
 
     
-    # Check if the image has an alpha channel and convert if necessary
-    #Apha channel prevent an image from being transparent so we cant remove the background
-    if nobg_image.mode == 'RGBA':
-        # Convert to RGB without alpha channel for JPEG or save as PNG to keep alpha channel
-        nobg_image = nobg_image.convert('RGB')
-        extension = ".png"  # Make it a PNG to support alpha channel
+        # Check if the image has an alpha channel and convert if necessary
+        #Apha channel prevent an image from being transparent so we cant remove the background
+        if nobg_image.mode == 'RGBA':
+            # Convert to RGB without alpha channel for JPEG or save as PNG to keep alpha channel
+            nobg_image = nobg_image.convert('RGB')
+            extension = ".png"  # Make it a PNG to support alpha channel
     
-    # Save the processed image to an in-memory file
-    img_bytes = io.BytesIO()
-    nobg_image.save(img_bytes, format='PNG' if extension == '.png' else image.format)
-    img_bytes.seek(0)
+        # Save the processed image to an in-memory file
+        img_bytes = io.BytesIO()
+        nobg_image.save(img_bytes, format='PNG' if extension == '.png' else image.format)
+        img_bytes.seek(0)
 
     st.image(nobg_image, caption=f"{name}-no-bg{extension}")
 
