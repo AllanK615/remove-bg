@@ -1,0 +1,1 @@
+# Remove background from Images in Python
